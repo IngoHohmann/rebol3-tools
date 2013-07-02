@@ -3,6 +3,12 @@ REBOL [
    Author: "Ingo Hohmann"
    Version: 0.0.2
    Date: 2013-07-02
+   About: {
+      A proof of concept for using LOAD to load data, which would normally not be loadable by Rebol3
+   }
+   Known-Errors: [
+      {rebol returns wrong error when loading strings like "1abcde"}
+   ]
 ]
 
 tne: funct [ 
@@ -52,14 +58,11 @@ default-handler: funct [
    case [
       all ['invalid = err/id "integer" = err/arg1]
 	    [
-	       ;print 'integer
 	       parse new-val: copy err/arg2 [opt ["+" | "-"] some [number] here: (insert here #" ")]
-	       ;print new-val
 	       change/part find pos val to binary! new-val length? err/arg2 
 	    ]
       all ['invalid = err/id "word" = err/arg1]
 	    [
-	       ;print 'word
 	       if err-pos: find new-val #"," [
 		  insert next err-pos {"}
 		  insert err-pos { #"}
@@ -68,7 +71,6 @@ default-handler: funct [
 	    ]
       true
 	    [
-	       ;print 'true
 	       change/part find pos val to binary! mold err/arg2 length? err/arg2 
 	    ]
       ]
