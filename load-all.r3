@@ -85,12 +85,12 @@ load-all: funct [
    pos: to binary! data ; we need binary! for transcode 
    block: copy []
    until [
-      temp: transcode/next/error pos
-      either error? err: temp/1 [
-	 handler pos temp/1 temp/2
+      set/any [val: new-pos:] transcode/next/error pos
+      either error? val [
+	 handler pos val new-pos
       ][
-	 append/only block temp/1
-	 pos: temp/2
+	 append/only block val
+	 pos: new-pos
       ]
       empty? pos
    ]
